@@ -1,0 +1,1 @@
+﻿{"DevId":"fe3c3eba0417d1a5","Passwd":"0000","PinCode":"0000","CmdList":[{"Cmd":"SetPatient","Param1":"PatientDelete","Param2":""},{"Cmd":"SetPopup","Param1":"SecShow","Param2":2,"Param3":0},{"Cmd":"SetCaller","Param1":"MsgSet","Param2":3,"Param3":1,"Param4":""},{"Cmd":"SetCaller","Param1":"SecShow","Param2":3,"Param3":
