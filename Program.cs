@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Bossinfo.Caller.MqttLogParserTesting
@@ -19,74 +18,75 @@ namespace Bossinfo.Caller.MqttLogParserTesting
 
         static LogService lg;
 
-        static string Topic = "";
+        static string DevTopic;
 
-        static string DevSn = "";
+        static string DevId;
 
-        static string MqIp = "";
+        static string MqIp;
+
+        static string SDate;
+
 
         static void Main(string[] args)
         {
+            MqIp = ToolService.GetConfig("MqIp");
+
+            DevId = ToolService.GetConfig("DevId");
+
+            SDate = ToolService.GetConfig("SDate");
+
+            DevTopic = $"SmartBoard/Device/{DevId}/ToDev";
+
+           
+
+            var tmp = ReadLog($@"{Directory.GetCurrentDirectory()}\Data\Data.log");
+
+            var closeDev = IOService.ReadTextByLine($@"{Directory.GetCurrentDirectory()}\Data\Data.log").FirstOrDefault().Replace("{{DevId}}", DevId);
+
+            today = Convert.ToDateTime(SDate);
+
+            mqs = new MqttService(MqIp);
+
+            lg = new LogService();
+
+
+
+            mqs.MqttPublish(DevTopic, closeDev);
+            System.Threading.Thread.Sleep(3000);
             try
             {
-                var tmp = ReadLog($@"{AppDomain.CurrentDomain.BaseDirectory}\Data\Data.log");
-
-                var closeDev = IOService.ReadTextByLine($@"{AppDomain.CurrentDomain.BaseDirectory}\Data\Close.txt").FirstOrDefault();
-
-                DevSn = System.Configuration.ConfigurationManager.AppSettings["DevSn"];
-
-                MqIp = System.Configuration.ConfigurationManager.AppSettings["MqIp"];
-
-                closeDev.Replace("{DevSn}", DevSn);
-
-                Topic = $"SmartBoard/Device/{DevSn}/ToDev";
-
-                today = Convert.ToDateTime("2020-03-19 00:00:00");
-
-                mqs = new MqttService(MqIp);
-
-                lg = new LogService();
-
-                Log($"DevSn:{DevSn}\tTopic:{Topic}");
-
-
-                mqs.MqttPublish(Topic, closeDev);
-                System.Threading.Thread.Sleep(5000);
-
                 var send = tmp.Where(o => o.Need == true).ToList();
 
+                //send.Count();
                 send.ForEach(x =>
-                {
+                  {
 
-                    MqPublish(x);
+                      MqPublish(x);
+                      //System.Threading.Thread.Sleep(1000);
+                      //if (i > 10)
+                      //{
+                      //    return;
+                      //}
 
-                });
+                      //i++;
+                  });
                 Log("測試結束");
             }
             catch (Exception ex)
             {
-                Log($"錯誤\n{ex.ToString()}");
+                Log("錯誤");
             }
-            Environment.Exit(Environment.ExitCode);
         }
 
 
         static void MqPublish(DataModel dm)
         {
-            if (dm.IsRestart)
-            {
-                mqs.MqttPublish(Topic, dm.Send);
-
-                Thread.Sleep(60 * 1000);
-                return;
-            }
-
             //判斷是否有前一個時間
             if (!preDateTime.HasValue)
             {
                 preDateTime = dm.DateTime;
-                mqs.MqttPublish(Topic, dm.Send);
-                Log($"{DateTime.Now.ToString("HHmmss")}\t{preDateTime.Value.ToString("yyyyMMdd HHmmss")}\tCmdDt:{dm.DateTime.ToString("yyyyMMdd HHmmss")}\t{dm.Cmd}\t{dm.ReqId}");
+                mqs.MqttPublish(DevTopic, dm.Send);
+                Log($"現在時間:{DateTime.Now.ToString("HHmmss")}\t{preDateTime.Value.ToString("yyyyMMdd HHmmss")}\tCmdDt:{dm.DateTime.ToString("yyyyMMdd HHmmss")}\t{dm.Cmd}\t{dm.Send.Substring(0, 50)}");
             }
             else
             {
@@ -108,15 +108,15 @@ namespace Bossinfo.Caller.MqttLogParserTesting
 
                             System.Threading.Thread.Sleep(5 * 1000);
 
-                            mqs.MqttPublish(Topic, dm.Send);
-                            Log($"現在時間:{DateTime.Now.ToString("HHmmss")}\t{preDateTime.Value.ToString("yyyyMMdd HHmmss")}\tCmdDt:{dm.DateTime.ToString("yyyyMMdd HHmmss")}\t秒:{dtR.TotalSeconds}\t{dm.Cmd}\t{dm.ReqId}");
+                            mqs.MqttPublish(DevTopic, dm.Send);
+                            Log($"現在時間:{DateTime.Now.ToString("HHmmss")}\t{preDateTime.Value.ToString("yyyyMMdd HHmmss")}\tCmdDt:{dm.DateTime.ToString("yyyyMMdd HHmmss")}\t秒:{dtR.TotalSeconds}\t{dm.Cmd}\t{dm.Send.Substring(0, 50)}");
                         }
                         else if (dtR.TotalSeconds == 0)
                         {
                             Log($"睡{dtR.Seconds}秒");
-                            //System.Threading.Thread.Sleep(1 * 100);
-                            mqs.MqttPublish(Topic, dm.Send);
-                            Log($"現在時間:{DateTime.Now.ToString("HHmmss")}\t{preDateTime.Value.ToString("yyyyMMdd HHmmss")}\tCmdDt:{dm.DateTime.ToString("yyyyMMdd HHmmss")}\t秒:{dtR.TotalSeconds}\t{dm.Cmd}\t{dm.ReqId}");
+
+                            mqs.MqttPublish(DevTopic, dm.Send);
+                            Log($"現在時間:{DateTime.Now.ToString("HHmmss")}\t{preDateTime.Value.ToString("yyyyMMdd HHmmss")}\tCmdDt:{dm.DateTime.ToString("yyyyMMdd HHmmss")}\t秒:{dtR.TotalSeconds}\t{dm.Cmd}\t{dm.Send.Substring(0, 50)}");
                         }
                         else
                         {
@@ -124,8 +124,8 @@ namespace Bossinfo.Caller.MqttLogParserTesting
 
                             System.Threading.Thread.Sleep(5 * 1000);
 
-                            mqs.MqttPublish(Topic, dm.Send);
-                            Log($"現在時間:{DateTime.Now.ToString("HHmmss")}\t{preDateTime.Value.ToString("yyyyMMdd HHmmss")}\tCmdDt:{dm.DateTime.ToString("yyyyMMdd HHmmss")}\t秒:{dtR.TotalSeconds}\t{dm.Cmd}\t{dm.ReqId}");
+                            mqs.MqttPublish(DevTopic, dm.Send);
+                            Log($"現在時間:{DateTime.Now.ToString("HHmmss")}\t{preDateTime.Value.ToString("yyyyMMdd HHmmss")}\tCmdDt:{dm.DateTime.ToString("yyyyMMdd HHmmss")}\t秒:{dtR.TotalSeconds}\t{dm.Cmd}\t{dm.Send.Substring(0, 50)}");
                         }
 
                     }
@@ -133,14 +133,14 @@ namespace Bossinfo.Caller.MqttLogParserTesting
                     {
 
                         System.Threading.Thread.Sleep(1 * 1000);
-                        mqs.MqttPublish(Topic, dm.Send);
-                        Log($"現在時間:{DateTime.Now.ToString("HHmmss")}\t{preDateTime.Value.ToString("yyyyMMdd HHmmss")}\tCmdDt:{dm.DateTime.ToString("yyyyMMdd HHmmss")}\t秒:0\t{dm.Cmd}\t{dm.ReqId}");
+                        mqs.MqttPublish(DevTopic, dm.Send);
+                        Log($"現在時間:{DateTime.Now.ToString("HHmmss")}\t{preDateTime.Value.ToString("yyyyMMdd HHmmss")}\tCmdDt:{dm.DateTime.ToString("yyyyMMdd HHmmss")}\t秒:0\t{dm.Cmd}\t{dm.Send.Substring(0, 50)}");
                     }
                 }
                 else
                 {
-                    mqs.MqttPublish(Topic, dm.Send);
-                    Log($"現在時間:{DateTime.Now.ToString("HHmmss")}\t{preDateTime.Value.ToString("yyyyMMdd HHmmss")}\tCmdDt:{dm.DateTime.ToString("yyyyMMdd HHmmss")}\t秒:0\t{dm.Cmd}\t{dm.ReqId}");
+                    mqs.MqttPublish(DevTopic, dm.Send);
+                    Log($"現在時間:{DateTime.Now.ToString("HHmmss")}\t{preDateTime.Value.ToString("yyyyMMdd HHmmss")}\tCmdDt:{dm.DateTime.ToString("yyyyMMdd HHmmss")}\t秒:0\t{dm.Cmd}\t{dm.Send.Substring(0, 50)}");
                 }
             }
 
@@ -168,7 +168,6 @@ namespace Bossinfo.Caller.MqttLogParserTesting
 
             lg.Info(data);
         }
-
     }
 
     public class DataModel
@@ -219,15 +218,6 @@ namespace Bossinfo.Caller.MqttLogParserTesting
             }
         }
 
-        public string ReqId
-        {
-            get
-            {
-                string[] ary4 = Regex.Split(Send.Substring(20), @":");
-
-                return ary4.LastOrDefault();
-            }
-        }
         public bool Need
         {
 
@@ -251,12 +241,5 @@ namespace Bossinfo.Caller.MqttLogParserTesting
             }
         }
 
-        public bool IsRestart
-        {
-            get
-            {
-                return Send.Contains("\"Param1\":\"Restart\"");
-            }
-        }
     }
 }

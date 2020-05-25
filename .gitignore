@@ -3,3 +3,10 @@
 ################################################################################
 
 /bin/Debug
+/.vs/Bossinfo.Caller.MqttLogParserTesting/v16/Server/sqlite3/storage.ide
+/.vs/Bossinfo.Caller.MqttLogParserTesting/v16/Server/sqlite3/db.lock
+/.vs/Bossinfo.Caller.MqttLogParserTesting/v16/Server/sqlite3
+/.vs/Bossinfo.Caller.MqttLogParserTesting/v16/.suo
+/.vs/Bossinfo.Caller.MqttLogParserTesting/v16
+/obj
+/packages

@@ -249,5 +249,18 @@ namespace Bossinfo.Caller.MqttLogParserTesting
 
             return result;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="Key"></param>
+        /// <returns></returns>
+        public static string GetConfig(string Key)
+        {
+            var appValue = System.Configuration.ConfigurationManager.AppSettings.Get(Key);
+
+            return string.IsNullOrWhiteSpace(appValue) ? string.Empty : appValue;
+
+        }
     }
 }

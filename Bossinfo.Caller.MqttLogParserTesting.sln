@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
-VisualStudioVersion = 16.0.28803.352
+VisualStudioVersion = 16.0.29123.88
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bossinfo.Caller.MqttLogParserTesting", "Bossinfo.Caller.MqttLogParserTesting.csproj", "{F95EABDC-1EE8-4BF1-9778-10B25019B2D0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogParserWin", "..\LogParserWin\LogParserWin.csproj", "{70D654E6-D24D-4BE7-B8BA-E5EF05D54C02}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,11 +17,15 @@ Global
 		{F95EABDC-1EE8-4BF1-9778-10B25019B2D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F95EABDC-1EE8-4BF1-9778-10B25019B2D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F95EABDC-1EE8-4BF1-9778-10B25019B2D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70D654E6-D24D-4BE7-B8BA-E5EF05D54C02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70D654E6-D24D-4BE7-B8BA-E5EF05D54C02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70D654E6-D24D-4BE7-B8BA-E5EF05D54C02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70D654E6-D24D-4BE7-B8BA-E5EF05D54C02}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {A2BFA8E4-1FAF-4CFC-9DFA-B0D300F200C7}
+		SolutionGuid = {F41C73DF-B212-48E5-B826-CDD844882934}
 	EndGlobalSection
 EndGlobal
