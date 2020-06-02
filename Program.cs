@@ -37,7 +37,7 @@ namespace Bossinfo.Caller.MqttLogParserTesting
 
             DevTopic = $"SmartBoard/Device/{DevId}/ToDev";
 
-           
+
 
             var tmp = ReadLog($@"{Directory.GetCurrentDirectory()}\Data\Data.log");
 
@@ -74,7 +74,7 @@ namespace Bossinfo.Caller.MqttLogParserTesting
             }
             catch (Exception ex)
             {
-                Log("錯誤");
+                Log($"錯誤\n{ex.ToString()}");
             }
         }
 
@@ -100,7 +100,7 @@ namespace Bossinfo.Caller.MqttLogParserTesting
                         var dt2 = new TimeSpan(dm.DateTime.Ticks);
 
                         var dtR = dt2 - dt1;
-
+                        Log(dm.Send);
                         //等候時間是否大於60
                         if (dtR.TotalSeconds > 60)
                         {
@@ -157,7 +157,10 @@ namespace Bossinfo.Caller.MqttLogParserTesting
 
                 y =>
                 {
-                    result.Add(new DataModel() { Data = y });
+                    if (y.Length >= 20)
+                    {
+                        result.Add(new DataModel() { Data = y });
+                    }
                 });
             return result;
         }
@@ -204,7 +207,18 @@ namespace Bossinfo.Caller.MqttLogParserTesting
             {
                 string[] ary4 = Regex.Split(Data.Substring(20), @" : ");
 
-                return ary4.FirstOrDefault();
+                try
+                {
+
+
+                    return ary4.FirstOrDefault();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ary4.ToString());
+                    Console.WriteLine(ex.ToString());
+                    return string.Empty;
+                }
             }
         }
 
