@@ -18,17 +18,23 @@ namespace Bossinfo.Caller.MqttLogParserTesting
 
         static LogService lg;
 
+
         static string DevTopic;
 
         static string DevId;
 
         static string MqIp;
-
         static string SDate;
-
 
         static void Main(string[] args)
         {
+            UnitTesting();
+        }
+
+
+        static void UnitTesting()
+        {
+
             MqIp = ToolService.GetConfig("MqIp");
 
             DevId = ToolService.GetConfig("DevId");
@@ -49,32 +55,36 @@ namespace Bossinfo.Caller.MqttLogParserTesting
 
             lg = new LogService();
 
+            var run = true;
 
-
-            mqs.MqttPublish(DevTopic, closeDev);
-            System.Threading.Thread.Sleep(3000);
-            try
+            while (run)
             {
-                var send = tmp.Where(o => o.Need == true).ToList();
+                mqs.MqttPublish(DevTopic, closeDev);
+                System.Threading.Thread.Sleep(3000);
+                try
+                {
+                    var send = tmp.Where(o => o.Need == true).ToList();
 
-                //send.Count();
-                send.ForEach(x =>
-                  {
+                    //send.Count();
+                    send.ForEach(x =>
+                    {
 
-                      MqPublish(x);
-                      //System.Threading.Thread.Sleep(1000);
-                      //if (i > 10)
-                      //{
-                      //    return;
-                      //}
+                        MqPublish(x);
+                        //System.Threading.Thread.Sleep(1000);
+                        //if (i > 10)
+                        //{
+                        //    return;
+                        //}
 
-                      //i++;
-                  });
-                Log("測試結束");
-            }
-            catch (Exception ex)
-            {
-                Log($"錯誤\n{ex.ToString()}");
+                        //i++;
+                    });
+                    Log("測試結束");
+                }
+                catch (Exception ex)
+                {
+                    Log($"錯誤\n{ex.ToString()}");
+                }
+                break;
             }
         }
 

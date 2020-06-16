@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bossinfo.Caller.MqttLogPars
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogParserWin", "..\LogParserWin\LogParserWin.csproj", "{70D654E6-D24D-4BE7-B8BA-E5EF05D54C02}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NtuhWSTesting", "..\NtuhWSTesting\NtuhWSTesting.csproj", "{6DF26DCF-1D20-451B-9DE6-6D081830B4F4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{70D654E6-D24D-4BE7-B8BA-E5EF05D54C02}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70D654E6-D24D-4BE7-B8BA-E5EF05D54C02}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{70D654E6-D24D-4BE7-B8BA-E5EF05D54C02}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6DF26DCF-1D20-451B-9DE6-6D081830B4F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6DF26DCF-1D20-451B-9DE6-6D081830B4F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6DF26DCF-1D20-451B-9DE6-6D081830B4F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6DF26DCF-1D20-451B-9DE6-6D081830B4F4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
